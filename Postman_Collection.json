@@ -1,0 +1,662 @@
+{
+  "info": {
+    "name": "Radhey Salts Backend API",
+    "description": "Complete API collection for Radhey Salts B2B ordering system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health & Monitoring",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["if (pm.response.code === 200) {", "  var jsonData = pm.response.json();", "  pm.environment.set(\"adminToken\", jsonData.data.accessToken);", "  pm.environment.set(\"adminId\", jsonData.data.admin._id);", "}"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"admin@radhey.com\", \"password\": \"Admin@123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/admin/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "admin", "login"]
+            }
+          }
+        },
+        {
+          "name": "Dealer Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["if (pm.response.code === 200) {", "  var jsonData = pm.response.json();", "  pm.environment.set(\"dealerToken\", jsonData.data.accessToken);", "  pm.environment.set(\"dealerId\", jsonData.data.dealer._id);", "}"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"amit.patel@dealer.com\", \"password\": \"Dealer@123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/dealer/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "dealer", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/:productId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", ":productId"],
+              "variable": [
+                {
+                  "key": "productId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product Pricing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/:productId/pricing?qty=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", ":productId", "pricing"],
+              "query": [
+                {
+                  "key": "qty",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "productId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Low Stock Products (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/admin/low-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "admin", "low-stock"]
+            }
+          }
+        },
+        {
+          "name": "Get Product Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/admin/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "admin", "statistics"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Place Order (Dealer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dealerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"items\": [{\"productId\": \"\", \"qty\": 100}], \"deliveryAddress\": \"123 Business St\", \"paymentMethod\": \"credit\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Dealer Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dealerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/my-orders?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "my-orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dealerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/:orderId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", ":orderId"],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order Timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dealerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/:orderId/timeline",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", ":orderId", "timeline"],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Orders (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/admin/all-orders?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "admin", "all-orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/admin/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "admin", "statistics"]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"orderStatus\": \"dispatched\", \"deliveryStage\": \"in_transit\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/:orderId/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", ":orderId", "status"],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Payment Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"paymentStatus\": \"completed\", \"amountPaid\": 35000}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/:orderId/payment",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", ":orderId", "payment"],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Get Inventory Snapshot (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/snapshot",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "snapshot"]
+            }
+          }
+        },
+        {
+          "name": "Reconstruct Stock from Ledger (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/:productId/reconstruct",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", ":productId", "reconstruct"],
+              "variable": [
+                {
+                  "key": "productId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detect Discrepancies (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/scan/discrepancies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "scan", "discrepancies"]
+            }
+          }
+        },
+        {
+          "name": "Set Reorder Level (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reorderLevel\": 600}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/:productId/reorder-level",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", ":productId", "reorder-level"],
+              "variable": [
+                {
+                  "key": "productId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Low Stock Alerts (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/low-stock-alerts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "low-stock-alerts"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Analytics",
+      "item": [
+        {
+          "name": "Dashboard Overview (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Sales Analytics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/sales/analytics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "sales", "analytics"]
+            }
+          }
+        },
+        {
+          "name": "Inventory Analytics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/inventory/analytics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "inventory", "analytics"]
+            }
+          }
+        },
+        {
+          "name": "Order Analytics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/orders/analytics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "orders", "analytics"]
+            }
+          }
+        },
+        {
+          "name": "Dealer Performance (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/dealers/performance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "dealers", "performance"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "dealerToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "dealerId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
