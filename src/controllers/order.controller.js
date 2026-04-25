@@ -1,7 +1,8 @@
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { AuditLog, InventoryLedger, Order, Product } from "../models/index.js";
+import { publishEmailEvent } from "../services/kafkaProducer.js";
 import { ApiError } from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { Order, Product, Dealer, InventoryLedger, AuditLog } from "../models/index.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 /**
  * Place new order (Dealer only)
@@ -136,6 +137,14 @@ export const placeOrder = asyncHandler(async (req, res) => {
     ipAddress: req.ip,
     userAgent: req.get("user-agent"),
     status: "success",
+  });
+
+  // 📤 Publish ORDER_PLACED event to Kafka for email notification
+  await publishEmailEvent({
+    eventType: "ORDER_PLACED",
+    orderId: order._id,
+    dealerId: order.dealerId,
+    order: order.toObject(),
   });
 
   return res.status(201).json(
@@ -303,6 +312,23 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     userAgent: req.get("user-agent"),
     status: "success",
   });
+
+  // 📤 Publish email events to Kafka based on order status
+  if (orderStatus === "dispatched") {
+    await publishEmailEvent({
+      eventType: "ORDER_DISPATCHED",
+      orderId: order._id,
+      dealerId: order.dealerId,
+      order: order.toObject(),
+    });
+  } else if (orderStatus === "delivered") {
+    await publishEmailEvent({
+      eventType: "ORDER_DELIVERED",
+      orderId: order._id,
+      dealerId: order.dealerId,
+      order: order.toObject(),
+    });
+  }
 
   return res.status(200).json(new ApiResponse(200, order, "Order status updated successfully"));
 });
@@ -560,6 +586,16 @@ export const updatePaymentStatus = asyncHandler(async (req, res) => {
     userAgent: req.get("user-agent"),
     status: "success",
   });
+
+  // 📤 Publish email event when payment is confirmed
+  if (paymentStatus === "completed") {
+    await publishEmailEvent({
+      eventType: "PAYMENT_CONFIRMED",
+      orderId: order._id,
+      dealerId: order.dealerId,
+      order: order.toObject(),
+    });
+  }
 
   return res.status(200).json(new ApiResponse(200, order, "Payment status updated successfully"));
 });

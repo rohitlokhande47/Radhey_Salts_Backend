@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
+    "consumer": "node src/consumer.js",
+    "dev-all": "concurrently \"npm run dev\" \"npm run consumer\"",
     "seed": "node seed.js",
+    "test-email": "node test-email-notification.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -20,6 +23,8 @@
   "author": "Radhey Salts",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "axios": "^1.6.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.33.0",
     "compression": "^1.7.4",
@@ -28,12 +33,14 @@
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.0",
+    "kafkajs": "^2.2.4",
     "mongoose": "^7.0.3",
     "multer": "^1.4.4",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
+    "concurrently": "^8.2.0",
     "nodemon": "^3.0.2"
   }
 }
