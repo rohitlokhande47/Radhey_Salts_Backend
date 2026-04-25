@@ -2,7 +2,6 @@ import fs from "fs";
 import { Kafka } from "kafkajs";
 import { Admin } from "../models/admin.model.js";
 import { Dealer } from "../models/dealer.model.js";
-import { Order } from "../models/orders.model.js";
 import { Product } from "../models/product.model.js";
 import { sendEmail } from "./emailService.js";
 

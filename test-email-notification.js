@@ -1,6 +1,6 @@
+import axios from "axios";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import axios from "axios";
 import { DB_NAME } from "./src/constants.js";
 import { Dealer } from "./src/models/dealer.model.js";
 import { Product } from "./src/models/product.model.js";
