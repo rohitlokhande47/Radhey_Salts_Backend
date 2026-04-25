@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpecs from "./config/swagger.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import { rateLimiterMiddleware, strictRateLimiter } from "./middlewares/rateLimiter.js";
 import { inputValidationMiddleware, strictInputValidation } from "./middlewares/inputValidator.js";
@@ -49,6 +51,29 @@ app.use(express.static("uploads"));
 // Health Check Route
 app.get("/api/v1/health", (req, res) => {
     res.json({ status: "✅ Server is running" });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SWAGGER UI - Interactive API Documentation
+// ═══════════════════════════════════════════════════════════════════════════════
+// Access at: http://localhost:8000/api-docs
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpecs, {
+        swaggerOptions: {
+            persistAuthorization: true,
+            displayOperationId: true
+        },
+        customCss: ".swagger-ui .topbar { display: none }",
+        customSiteTitle: "Radhe Salt Backend API Documentation"
+    })
+);
+
+// Swagger JSON Endpoint
+app.get("/swagger.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpecs);
 });
 
 // Import Rate Limiter & Logger for monitoring

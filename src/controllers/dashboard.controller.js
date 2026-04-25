@@ -1,12 +1,12 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
+import ApiResponse from "../utils/ApiResponse.js";
 import { Admin } from "../models/admin.model.js";
 import { Dealer } from "../models/dealer.model.js";
 import { Product } from "../models/product.model.js";
-import { Order } from "../models/order.model.js";
+import { Order } from "../models/orders.model.js";
 import { InventoryLedger } from "../models/inventoryLedger.model.js";
-import { DailySnapshots } from "../models/dailySnapshots.model.js";
+import { DailySnapshot } from "../models/dailySnapshots.model.js";
 
 /**
  * PHASE 6: ADMIN DASHBOARD & ANALYTICS CONTROLLER

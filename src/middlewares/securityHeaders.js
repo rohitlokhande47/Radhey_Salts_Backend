@@ -101,7 +101,7 @@ export const securityHeadersMiddleware = (req, res, next) => {
  * Generate CSP Nonce for inline scripts
  * (Rarely needed in modern APIs but included for completeness)
  */
-export const generateCspNonce = (req, res, next) => {
+export const generateCspNonce = async (req, res, next) => {
   const crypto = await import("crypto");
   const nonce = crypto.randomBytes(16).toString("base64");
   res.locals.cspNonce = nonce;

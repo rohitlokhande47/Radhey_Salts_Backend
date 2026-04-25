@@ -18,6 +18,7 @@
  */
 
 import compression from "compression";
+import crypto from "crypto";
 
 /**
  * Response Compression Middleware
@@ -78,8 +79,6 @@ export const cacheControlMiddleware = (req, res, next) => {
  * Generate ETags for cache validation
  */
 export const etagMiddleware = (req, res, next) => {
-  const crypto = await import("crypto");
-  
   const originalJson = res.json;
 
   res.json = function (data) {

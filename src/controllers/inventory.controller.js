@@ -12,12 +12,12 @@
  * - Compliance audit support
  */
 
-import Product from "../models/product.model.js";
-import InventoryLedger from "../models/inventoryLedger.model.js";
-import AuditLog from "../models/auditLog.model.js";
-import Order from "../models/orders.model.js";
-import asyncHandler from "../utils/asyncHandler.js";
-import ApiError from "../utils/ApiError.js";
+import { Product } from "../models/product.model.js";
+import { InventoryLedger } from "../models/inventoryLedger.model.js";
+import { AuditLog } from "../models/auditLog.model.js";
+import { Order } from "../models/orders.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
 // ═════════════════════════════════════════════════════════════════════════
