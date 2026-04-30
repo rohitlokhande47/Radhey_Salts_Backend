@@ -145,6 +145,67 @@ export const dealerLogin = asyncHandler(async (req, res) => {
 });
 
 /**
+ * DEALER REGISTRATION CONTROLLER
+ * 
+ * Accepts: email, password, name, phone, businessName, address, city, state, pincode
+ * Returns: Dealer details (without password)
+ * Creates new dealer account
+ */
+export const dealerRegister = asyncHandler(async (req, res) => {
+    const { email, password, name, phone, businessName, address, city, state, pincode } = req.body;
+
+    // Validation - Check all required fields
+    if ([email, password, name, phone, businessName, address, city, state, pincode].some((field) => !field || (typeof field === 'string' && field.trim() === ""))) {
+        throw new ApiError(400, "All fields are required");
+    }
+
+    // Phone validation - should be 10 digits
+    if (!/^[0-9]{10}$/.test(phone)) {
+        throw new ApiError(400, "Phone number must be 10 digits");
+    }
+
+    // Pincode validation - should be 6 digits
+    if (!/^[0-9]{6}$/.test(pincode)) {
+        throw new ApiError(400, "Pincode must be 6 digits");
+    }
+
+    // Check if dealer already exists with same email or phone
+    const existedDealer = await Dealer.findOne({
+        $or: [{ email }, { phone }],
+    });
+
+    if (existedDealer) {
+        throw new ApiError(409, "Dealer with this email or phone already exists");
+    }
+
+    // Create dealer
+    const dealer = await Dealer.create({
+        name,
+        email,
+        password,
+        phone,
+        businessName,
+        address,
+        city,
+        state,
+        pincode,
+        role: "dealer",
+        status: "active",
+        creditLimit: 0, // Can be updated by admin
+        outstandingBalance: 0,
+    });
+
+    // Fetch created dealer without password
+    const createdDealer = await Dealer.findById(dealer._id).select("-password");
+
+    if (!createdDealer) {
+        throw new ApiError(500, "Something went wrong while registering the dealer");
+    }
+
+    return res.status(201).json(new ApiResponse(201, createdDealer, "Dealer registered successfully"));
+});
+
+/**
  * LOGOUT CONTROLLER
  * 
  * Accepts: Current token (from header or cookie)
@@ -319,6 +380,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 export default {
     adminLogin,
     dealerLogin,
+    dealerRegister,
     logout,
     refreshAccessToken,
     changePassword,

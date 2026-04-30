@@ -23,6 +23,7 @@
   "author": "Radhey Salts",
   "license": "ISC",
   "dependencies": {
+    "@apidevtools/openapi-schemas": "^2.1.0",
     "@sendgrid/mail": "^7.7.0",
     "axios": "^1.6.0",
     "bcrypt": "^5.0.1",

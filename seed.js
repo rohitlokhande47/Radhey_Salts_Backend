@@ -288,7 +288,12 @@ const seedDatabase = async () => {
         // SEED ADMINS
         // ═══════════════════════════════════════════════════════════════════════
         console.log("\n👨‍💼 Creating Admin users...");
-        const admins = await Admin.insertMany(generateDummyAdmins());
+        const adminsData = generateDummyAdmins();
+        const admins = [];
+        for (const adminData of adminsData) {
+            const admin = await Admin.create(adminData);
+            admins.push(admin);
+        }
         console.log(`✅ Created ${admins.length} admin(s)`);
         admins.forEach((admin) => {
             console.log(`   - ${admin.name} (${admin.email}) - Role: ${admin.role}`);
@@ -298,7 +303,12 @@ const seedDatabase = async () => {
         // SEED DEALERS
         // ═══════════════════════════════════════════════════════════════════════
         console.log("\n🤝 Creating Dealer accounts...");
-        const dealers = await Dealer.insertMany(generateDummyDealers());
+        const dealersData = generateDummyDealers();
+        const dealers = [];
+        for (const dealerData of dealersData) {
+            const dealer = await Dealer.create(dealerData);
+            dealers.push(dealer);
+        }
         console.log(`✅ Created ${dealers.length} dealer(s)`);
         dealers.forEach((dealer) => {
             console.log(`   - ${dealer.name} (${dealer.email}) - Business: ${dealer.businessName}`);

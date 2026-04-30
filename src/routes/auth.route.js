@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     adminLogin,
     dealerLogin,
+    dealerRegister,
     logout,
     refreshAccessToken,
     changePassword,
@@ -26,6 +27,12 @@ router.post("/admin/login", adminLogin);
 // Body: { email (or phone), password }
 // Returns: { accessToken, refreshToken, dealer }
 router.post("/dealer/login", dealerLogin);
+
+// Dealer Registration
+// POST /api/v1/auth/dealer/register
+// Body: { email, password, name, phone, businessName, address, city, state, pincode }
+// Returns: { dealer details }
+router.post("/dealer/register", dealerRegister);
 
 /**
  * PROTECTED ROUTES (Authentication required)

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const adminSchema = new mongoose.Schema(
     {
@@ -69,7 +70,7 @@ adminSchema.methods.isPasswordCorrect = async function (password) {
 
 // Method to generate access token
 adminSchema.methods.generateAccessToken = function () {
-    const jti = require("crypto").randomBytes(16).toString("hex");
+    const jti = crypto.randomBytes(16).toString("hex");
     return jwt.sign(
         {
             _id: this._id,
